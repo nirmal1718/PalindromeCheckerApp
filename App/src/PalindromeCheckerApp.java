@@ -1,36 +1,72 @@
-import java.util.Deque;
-import java.util.LinkedList;
+class ListNode {
+    char val;
+    ListNode next;
+    ListNode(char val) { this.val = val; }
+}
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
+        PalindromeCheckerApp checker = new PalindromeCheckerApp();
 
-        String str = "racecar";
+        String word = "racecar";
+        if (checker.isPalindrome(word)) {
+            System.out.println("'" + word + "' is a palindrome.");
+        } else {
+            System.out.println("'" + word + "' is not a palindrome.");
+        }
+    }
 
-        Deque<Character> deque = new LinkedList<>();
+    public boolean isPalindrome(String s) {
+        if (s == null || s.isEmpty()) return true;
 
-        for (char c : str.toCharArray()) {
-            deque.add(c);
+        ListNode head = stringToList(s);
+
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        boolean isPalindrome = true;
+        ListNode secondHalfHead = reverseList(slow);
+        ListNode firstHalfHead = head;
 
-        while (deque.size() > 1) {
-            char frontChar = deque.removeFirst();
-            char rearChar = deque.removeLast();
+        ListNode p1 = firstHalfHead;
+        ListNode p2 = secondHalfHead;
+        boolean result = true;
 
-            System.out.println("Front: " + frontChar + ", Rear: " + rearChar);
-
-            if (frontChar != rearChar) {
-                isPalindrome = false;
+        while (p2 != null) {
+            if (p1.val != p2.val) {
+                result = false;
                 break;
             }
+            p1 = p1.next;
+            p2 = p2.next;
         }
 
-        if (isPalindrome) {
-            System.out.println("The string \"" + str + "\" is a palindrome.");
-        } else {
-            System.out.println("The string \"" + str + "\" is not a palindrome.");
+        return result;
+    }
+
+    private ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode nextTemp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextTemp;
         }
+        return prev;
+    }
+
+    private ListNode stringToList(String s) {
+        ListNode dummy = new ListNode(' ');
+        ListNode curr = dummy;
+        for (char c : s.toCharArray()) {
+            curr.next = new ListNode(c);
+            curr = curr.next;
+        }
+        return dummy.next;
     }
 }
