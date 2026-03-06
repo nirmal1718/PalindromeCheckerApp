@@ -10,7 +10,7 @@ public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
         PalindromeCheckerApp checker = new PalindromeCheckerApp();
-        String word = "level";
+        String word = "A man a plan a canal Panama";
 
         if (checker.isPalindrome(word)) {
             System.out.println("'" + word + "' is a palindrome.");
@@ -20,9 +20,13 @@ public class PalindromeCheckerApp {
     }
 
     public boolean isPalindrome(String s) {
-        if (s == null || s.isEmpty()) return true;
+        if (s == null) return true;
 
-        ListNode head = stringToList(s);
+        String normalized = s.replaceAll("\\s+", "").toLowerCase();
+
+        if (normalized.isEmpty()) return true;
+
+        ListNode head = stringToList(normalized);
         leftSidePointer = head;
 
         return checkRecursively(head);
