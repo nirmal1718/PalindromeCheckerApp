@@ -6,10 +6,12 @@ class ListNode {
 
 public class PalindromeCheckerApp {
 
+    private ListNode leftSidePointer;
+
     public static void main(String[] args) {
         PalindromeCheckerApp checker = new PalindromeCheckerApp();
+        String word = "level";
 
-        String word = "racecar";
         if (checker.isPalindrome(word)) {
             System.out.println("'" + word + "' is a palindrome.");
         } else {
@@ -21,43 +23,24 @@ public class PalindromeCheckerApp {
         if (s == null || s.isEmpty()) return true;
 
         ListNode head = stringToList(s);
+        leftSidePointer = head;
 
-        ListNode slow = head;
-        ListNode fast = head;
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        ListNode secondHalfHead = reverseList(slow);
-        ListNode firstHalfHead = head;
-
-        ListNode p1 = firstHalfHead;
-        ListNode p2 = secondHalfHead;
-        boolean result = true;
-
-        while (p2 != null) {
-            if (p1.val != p2.val) {
-                result = false;
-                break;
-            }
-            p1 = p1.next;
-            p2 = p2.next;
-        }
-
-        return result;
+        return checkRecursively(head);
     }
 
-    private ListNode reverseList(ListNode head) {
-        ListNode prev = null;
-        ListNode curr = head;
-        while (curr != null) {
-            ListNode nextTemp = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = nextTemp;
+    private boolean checkRecursively(ListNode rightSidePointer) {
+        if (rightSidePointer == null) {
+            return true;
         }
-        return prev;
+
+        boolean isSubListPalindrome = checkRecursively(rightSidePointer.next);
+
+        if (!isSubListPalindrome) return false;
+
+        boolean valuesMatch = (rightSidePointer.val == leftSidePointer.val);
+        leftSidePointer = leftSidePointer.next;
+
+        return valuesMatch;
     }
 
     private ListNode stringToList(String s) {
