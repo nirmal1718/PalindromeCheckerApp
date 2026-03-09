@@ -1,55 +1,49 @@
-class ListNode {
-    char val;
-    ListNode next;
-    ListNode(char val) { this.val = val; }
+import java.util.Stack;
+import java.util.Scanner;
+
+class PalindromeChecker {
+
+    private String text;
+
+    public PalindromeChecker(String text) {
+        this.text = text;
+    }
+
+    public boolean checkPalindrome() {
+
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < text.length(); i++) {
+            stack.push(text.charAt(i));
+        }
+
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) != stack.pop()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 public class PalindromeCheckerApp {
 
-    private ListNode leftSidePointer;
-
     public static void main(String[] args) {
-        PalindromeCheckerApp checker = new PalindromeCheckerApp();
-        String word = "level";
 
-        if (checker.isPalindrome(word)) {
-            System.out.println("'" + word + "' is a palindrome.");
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter a word: ");
+        String input = sc.nextLine();
+
+        PalindromeChecker pc = new PalindromeChecker(input);
+
+        if (pc.checkPalindrome()) {
+            System.out.println("Palindrome");
         } else {
-            System.out.println("'" + word + "' is not a palindrome.");
-        }
-    }
-
-    public boolean isPalindrome(String s) {
-        if (s == null || s.isEmpty()) return true;
-
-        ListNode head = stringToList(s);
-        leftSidePointer = head;
-
-        return checkRecursively(head);
-    }
-
-    private boolean checkRecursively(ListNode rightSidePointer) {
-        if (rightSidePointer == null) {
-            return true;
+            System.out.println("Not Palindrome");
         }
 
-        boolean isSubListPalindrome = checkRecursively(rightSidePointer.next);
-
-        if (!isSubListPalindrome) return false;
-
-        boolean valuesMatch = (rightSidePointer.val == leftSidePointer.val);
-        leftSidePointer = leftSidePointer.next;
-
-        return valuesMatch;
-    }
-
-    private ListNode stringToList(String s) {
-        ListNode dummy = new ListNode(' ');
-        ListNode curr = dummy;
-        for (char c : s.toCharArray()) {
-            curr.next = new ListNode(c);
-            curr = curr.next;
-        }
-        return dummy.next;
+        sc.close();
     }
 }
